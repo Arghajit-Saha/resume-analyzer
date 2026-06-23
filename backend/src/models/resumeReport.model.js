@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const technicalQuestionSchema = new mongoose.Schema({
-    question: {
+    questions: {
         type: String,
         required: [true, "Technical Question is required"]
     },
@@ -44,8 +44,8 @@ const preparationPlanSchema = new mongoose.Schema({
     }]
 });
 
-const behavorialQuestionSchema = new mongoose.Schema({
-    question: {
+const behavioralQuestionSchema = new mongoose.Schema({
+    questions: {
         type: String,
         required: [true, "Technical Question is required"]
     },
@@ -78,9 +78,13 @@ const resuemReportSchema = new mongoose.Schema({
         max: 100
     },
     technicalQuestions: [technicalQuestionSchema],
-    behavorialQuestions: [behavorialQuestionSchema],
+    behavioralQuestions: [behavioralQuestionSchema],
     skillGaps: [skillGapSchema],
-    preparationPlan: [preparationPlanSchema]
+    preparationPlan: [preparationPlanSchema],
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "user"
+    }
 }, {
     timestamps: true
 });

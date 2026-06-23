@@ -2,7 +2,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const authRouter = require("./routes/auth.route")
+const authRouter = require("./routes/auth.route");
+const resumeRouter = require("./routes/resume.route");
 
 const app = express();
 app.use(express.json());
@@ -13,5 +14,6 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRouter);
+app.use("/api/resume", resumeRouter);
 
 module.exports = app;

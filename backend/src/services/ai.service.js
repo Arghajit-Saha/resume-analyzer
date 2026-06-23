@@ -17,7 +17,7 @@ const resumeReportZodSchema = z.object({
         intention: z.string(),
         answer: z.string()
     })),
-    skillGap: z.array(z.object({
+    skillGaps: z.array(z.object({
         skill: z.string(),
         severity: z.enum(["low", "moderate", "high"])
     })),
@@ -30,7 +30,7 @@ const resumeReportZodSchema = z.object({
 
 const resumeReportSchema = {
   type: Type.OBJECT,
-  required: ["matchScore", "technicalQuestions", "behavioralQuestions", "skillGap", "preparationPlan"],
+  required: ["matchScore", "technicalQuestions", "behavioralQuestions", "skillGaps", "preparationPlan"],
   properties: {
     matchScore: {
       type: Type.NUMBER,
@@ -80,7 +80,7 @@ const resumeReportSchema = {
         },
       },
     },
-    skillGap: {
+    skillGaps: {
       type: Type.ARRAY,
       description: "List of all skill gaps in the candidate's profile along with their severity",
       items: {
@@ -127,25 +127,26 @@ const resumeReportSchema = {
   },
 };
 
-async function generateResumeReport({resume, selfdescription, jobdescription}) {
+async function generateResumeReportHelper({resume, selfDescription, jobDescription}) {
     const prompt = `Generate a resume report for a candidate with teh following details: 
         Resume: ${resume}
-        Self Descripton: ${selfdescription}
-        Job Description: ${jobdescription}
+        Self Descripton: ${selfDescription}
+        Job Description: ${jobDescription}
     `;
     
     const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-lite",
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
-            responseSchema: resumeReportSchema
+            responseSchema: resumeReportSchema,
         }
     });
 
-    const report = resumeReportZodSchema.parse(JSON.parse(response.text));
+    const report = JSON.parse(response.text);
 
     console.log(report);
+    return report;
 }
 
-module.exports = generateResumeReport;
+module.exports = generateResumeReportHelper;

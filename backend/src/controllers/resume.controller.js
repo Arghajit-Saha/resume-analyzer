@@ -1,0 +1,33 @@
+const pdfParse = require("pdf-parse");
+const generateResumeReportHelper = require("../services/ai.service");
+const resumeReportModel = require("../models/resumeReport.model");
+
+async function generateResumeReport(req, res) {
+    const resumeFile = req.file;
+
+    const parser = new pdfParse.PDFParse({ data: req.file.buffer });
+    const resumeContent = await parser.getText();
+    await parser.destroy();
+    const { selfDescription, jobDescription } = req.body;
+
+    const resumeReportByAI = await generateResumeReportHelper({
+        resume: resumeContent.text,
+        selfDescription,
+        jobDescription
+    });
+
+    const resumeReport = await resumeReportModel.create({
+        user: req.user.id,
+        resume: resumeContent.text,
+        selfDescription,
+        jobDescription,
+        ...resumeReportByAI
+    });
+
+    res.status(201).json({
+        message: "Resume report generated successfully",
+        resumeReport: resumeReport
+    })
+}
+
+module.exports = { generateResumeReport };
