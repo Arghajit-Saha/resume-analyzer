@@ -30,4 +30,19 @@ async function generateResumeReport(req, res) {
     })
 }
 
-module.exports = { generateResumeReport };
+async function getResumeReport(req, res) {
+    const report = await resumeReportModel.findOne({
+        _id: req.params.id,
+        user: req.user.id
+    })
+
+    if(!report) {
+        return res.status(401).json({
+            message: "Report not found!"
+        })
+    }
+
+    res.status(200).json(report);
+}
+
+module.exports = { generateResumeReport, getResumeReport };

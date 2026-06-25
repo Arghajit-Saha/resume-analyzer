@@ -6,5 +6,6 @@ const resumeControllers = require("../controllers/resume.controller");
 const resumeRouter = express.Router();
 
 resumeRouter.post("/", authMiddleware.authUser, upload.single("resume"), resumeControllers.generateResumeReport);
+resumeRouter.get("/:id", authMiddleware.authUser, resumeControllers.getResumeReport);
 
 module.exports = resumeRouter;

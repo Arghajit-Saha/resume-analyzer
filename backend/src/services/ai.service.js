@@ -145,7 +145,6 @@ async function generateResumeReportHelper({resume, selfDescription, jobDescripti
 
     const report = JSON.parse(response.text);
 
-    console.log(report);
     return report;
 }
 
