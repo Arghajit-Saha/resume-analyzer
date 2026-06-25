@@ -5,16 +5,16 @@ const userModel = require("../models/user.model");
 const tokenBlacklistModel = require("../models/blacklist.model");
 
 async function registerUser(req, res) {
-    const { username, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-    if(!username || !email || !password) {
+    if(!firstName || !email || !password) {
         return res.status(400).json({
             message: "Please provide username, email and password"
         });
     }
 
     const isUserAlreadyExists = await userModel.findOne({
-        $or: [{ username }, { email }]
+        email
     });
 
     if(isUserAlreadyExists) {
@@ -27,14 +27,15 @@ async function registerUser(req, res) {
     const hash = await bcrypt.hash(password, salt);
 
     const user = await userModel.create({
-        username,
+        firstName,
+        lastName,
         email,
         password: hash
     });
 
     const token = await jwt.sign({
         id: user._id,
-        username: user.username
+        email: user.email
     }, process.env.JWT_SECRET);
 
     res.cookie("token", token);
@@ -42,7 +43,8 @@ async function registerUser(req, res) {
         message: "User registered successfully!",
         user: {
             id: user._id,
-            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email
         }
     })
@@ -71,7 +73,7 @@ async function loginUser(req, res) {
 
     const token = await jwt.sign({
         id: user._id,
-        username: user.username
+        email: user.email
     }, process.env.JWT_SECRET);
 
     res.cookie("token", token);
@@ -79,7 +81,8 @@ async function loginUser(req, res) {
         message: "User logged in successfully",
         user: {
             id: user._id,
-            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email
         }
     })
@@ -104,7 +107,8 @@ async function fetchMe(req, res) {
         message: "User fetched successfully",
         user: {
             id: user._id,
-            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email
         }
     });
