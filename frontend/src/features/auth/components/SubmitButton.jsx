@@ -1,7 +1,7 @@
 export default function SubmitButton({ children, loading, ...props }) {
   return (
     <button
-      className="w-full py-3.5 px-6 text-[15px] font-semibold font-sans text-inverse bg-accent border-none rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 relative overflow-hidden hover:not-disabled:bg-accent-hover hover:not-disabled:-translate-y-px hover:not-disabled:shadow-[0_4px_16px_rgba(45,43,61,0.08)] active:not-disabled:translate-y-0 active:not-disabled:shadow-[0_1px_2px_rgba(45,43,61,0.04)] disabled:opacity-70 disabled:cursor-not-allowed group"
+      className="w-full py-3.5 px-6 text-[15px] font-semibold font-sans text-inverse bg-accent border-none rounded-xl cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 relative overflow-hidden hover:not-disabled:bg-accent-hover hover:not-disabled:scale-[1.01] hover:not-disabled:shadow-[0_4px_16px_rgba(45,43,61,0.08)] active:not-disabled:scale-[0.98] active:not-disabled:shadow-[0_1px_2px_rgba(45,43,61,0.04)] disabled:opacity-70 disabled:cursor-not-allowed group"
       disabled={loading}
       {...props}
       type="submit"
