@@ -62,8 +62,11 @@ export default function AppLayout() {
           <div className="flex-1 flex items-center justify-end gap-2 pr-1">
             <ThemeToggle className="!w-10 !h-10 rounded-full bg-transparent border-none opacity-60 hover:opacity-100 hover:bg-edge/30 transition-all flex items-center justify-center" />
 
-            <Link to="/profile" className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-inverse text-[14px] font-bold shadow-md hover:scale-105 transition-transform no-underline" title="Profile">
-              {user?.firstName?.charAt(0).toUpperCase() || 'U'}
+            <Link to="/profile" className="flex items-center justify-center w-10 h-10 rounded-full bg-accent text-inverse shadow-md hover:scale-105 transition-transform no-underline" title="Profile">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
             </Link>
 
             <button
@@ -88,7 +91,7 @@ export default function AppLayout() {
         <Outlet />
       </main>
 
-      <footer className="mt-10 py-10 px-8 lg:px-16 2xl:px-32 max-md:px-5 border-t border-lavender/20 bg-lavender/5 dark:bg-card/30 backdrop-blur-sm relative overflow-hidden">
+      <footer className={`mt-10 py-10 px-8 lg:px-16 2xl:px-32 max-md:px-5 border-t border-lavender/20 bg-lavender/5 dark:bg-card/30 backdrop-blur-sm relative overflow-hidden ${location.pathname.startsWith('/report') ? 'lg:ml-[320px]' : ''}`}>
         <div className="absolute rounded-full w-[40vw] h-[40vw] bg-mint/10 dark:bg-mint/5 blur-[80px] -bottom-[20%] -left-[10%] pointer-events-none" aria-hidden="true" />
         <div className="absolute rounded-full w-[30vw] h-[30vw] bg-peach/10 dark:bg-peach/5 blur-[80px] -bottom-[10%] right-[5%] pointer-events-none" aria-hidden="true" />
 

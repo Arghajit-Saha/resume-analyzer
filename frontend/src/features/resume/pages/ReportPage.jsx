@@ -162,11 +162,11 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="w-full h-dvh bg-surface text-body font-sans selection:bg-accent selection:text-inverse flex flex-col overflow-hidden">
+    <div className="w-full min-h-screen bg-surface text-body font-sans selection:bg-accent selection:text-inverse">
       
-      <div className="flex flex-1 overflow-hidden max-lg:flex-col relative">
+      <div className="flex flex-1 max-lg:flex-col relative items-start">
         
-        <aside className="w-[320px] shrink-0 border-r border-edge bg-card overflow-y-auto max-lg:w-full max-lg:border-r-0 max-lg:border-b z-30">
+        <aside className="w-[320px] shrink-0 border-r border-edge bg-card overflow-y-auto max-lg:w-full max-lg:border-r-0 max-lg:border-b z-30 lg:fixed lg:top-[120px] lg:bottom-0 lg:left-0 max-lg:h-auto">
           <div className="p-6 flex flex-col">
             
             <div className="flex flex-col items-center text-center animate-fade-up">
@@ -220,7 +220,7 @@ export default function ReportPage() {
           </div>
         </aside>
 
-        <main className="flex-1 overflow-y-auto scroll-smooth">
+        <main className="flex-1 lg:ml-[320px]">
           <div className="max-w-[900px] mx-auto px-16 py-16 max-xl:px-10 max-md:px-6 max-md:py-10 flex flex-col gap-20">
             
             <section id="skill-gaps" className="animate-fade-up [animation-delay:0.1s] scroll-mt-8">
