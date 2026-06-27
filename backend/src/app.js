@@ -5,6 +5,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth.route");
 const resumeRouter = require("./routes/resume.route");
 const profileRouter = require("./routes/profile.route");
+const healthRouter = require("./routes/health.route");
 
 const app = express();
 app.use(express.json());
@@ -30,5 +31,6 @@ app.use(cors({
 app.use("/api/auth", authRouter);
 app.use("/api/resume", resumeRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/health", healthRouter);
 
 module.exports = app;
