@@ -45,4 +45,14 @@ async function getResumeReport(req, res) {
     res.status(200).json(report);
 }
 
-module.exports = { generateResumeReport, getResumeReport };
+async function deleteResumeReport(req, res) {
+    await resumeReportModel.deleteOne({
+        _id: req.params.id,
+        user: req.user.id
+    });
+    return res.status(200).json({
+        message: "Report deleted succesfully!"
+    })
+} 
+
+module.exports = { generateResumeReport, getResumeReport, deleteResumeReport };
