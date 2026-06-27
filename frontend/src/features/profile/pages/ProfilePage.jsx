@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchProfile } from '../services/profile.api';
+import { deleteReport } from '../../resume/services/resume.api';
 import { useAuth } from '../../auth/hooks/useAuth';
 import Loader from '../../../components/Loader';
 import { useToast } from '../../../components/ToastContext';
@@ -8,6 +9,7 @@ import { useToast } from '../../../components/ToastContext';
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const { user, handleLogout } = useAuth();
   const { addToast } = useToast();
 
@@ -24,6 +26,30 @@ export default function ProfilePage() {
     };
     loadProfile();
   }, [addToast]);
+
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (deleteConfirmId === id) {
+      try {
+        await deleteReport(id);
+        setProfile(prev => ({
+          ...prev,
+          reports: prev.reports.filter(r => r._id !== id)
+        }));
+        addToast({ type: 'success', message: 'Report deleted.' });
+      } catch (err) {
+        addToast({ type: 'error', message: 'Failed to delete report.' });
+      }
+      setDeleteConfirmId(null);
+    } else {
+      setDeleteConfirmId(id);
+      setTimeout(() => {
+        setDeleteConfirmId(current => current === id ? null : current);
+      }, 3000);
+    }
+  };
 
   if (loading) {
     return <div className="h-[calc(100vh-72px)]"><Loader fullScreen={false} text="Loading..." /></div>;
@@ -108,10 +134,11 @@ export default function ProfilePage() {
         ) : (
           /* Table-style list */
           <div className="border border-edge rounded-2xl overflow-hidden">
-            <div className="hidden sm:grid grid-cols-[1fr_140px_100px] gap-4 px-6 py-3 bg-card/50 border-b border-edge text-[11px] font-bold text-muted uppercase tracking-[0.12em]">
+            <div className="hidden sm:grid grid-cols-[1fr_140px_100px_60px] gap-4 px-6 py-3 bg-card/50 border-b border-edge text-[11px] font-bold text-muted uppercase tracking-[0.12em]">
               <span>Job Description</span>
               <span>Date</span>
               <span className="text-right">Score</span>
+              <span></span>
             </div>
 
             {sortedReports.map((report, idx) => {
@@ -130,11 +157,11 @@ export default function ProfilePage() {
                 <Link
                   key={report._id || idx}
                   to={`/report/${report._id}`}
-                  className={`group grid grid-cols-1 sm:grid-cols-[1fr_140px_100px] gap-2 sm:gap-4 items-center px-6 py-4 no-underline transition-colors duration-150 hover:bg-card/60 ${
+                  className={`group relative grid grid-cols-1 sm:grid-cols-[1fr_140px_100px_60px] gap-2 sm:gap-4 items-center px-6 py-4 no-underline transition-colors duration-150 hover:bg-card/60 ${
                     idx < sortedReports.length - 1 ? 'border-b border-edge/50' : ''
                   }`}
                 >
-                  <span className="text-[14px] font-medium text-heading group-hover:text-accent transition-colors line-clamp-1">
+                  <span className="text-[14px] font-medium text-heading group-hover:text-accent transition-colors line-clamp-1 pr-12 sm:pr-0">
                     {jdPreview}
                   </span>
 
@@ -143,6 +170,28 @@ export default function ProfilePage() {
                   <span className={`text-[20px] font-display font-bold ${scoreColor} sm:text-right tabular-nums`}>
                     {score ?? '—'}
                   </span>
+                  
+                  <div className="flex justify-end absolute sm:relative right-4 sm:right-0 top-4 sm:top-auto">
+                    <button 
+                      onClick={(e) => handleDelete(e, report._id)}
+                      className={`h-8 flex items-center justify-center rounded-lg transition-all duration-200 ${
+                        deleteConfirmId === report._id 
+                          ? 'bg-error text-inverse font-bold text-[11px] px-2 w-[60px]' 
+                          : 'text-muted hover:text-error hover:bg-error/10 w-8'
+                      }`}
+                      title={deleteConfirmId === report._id ? "Confirm Delete" : "Delete Report"}
+                    >
+                      {deleteConfirmId === report._id ? (
+                        "Sure?"
+                      ) : (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18"></path>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </Link>
               );
             })}

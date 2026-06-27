@@ -32,3 +32,13 @@ export async function fetchReportById(id) {
     throw err;
   }
 }
+
+export async function deleteReport(id) {
+  try {
+    const res = await api.delete(`/api/resume/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
