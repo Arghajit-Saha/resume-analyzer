@@ -10,7 +10,20 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5173", "https://cnv2h388-5173.inc1.devtunnels.ms"],
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = process.env.ALLOWED_ORIGIN 
+            ? process.env.ALLOWED_ORIGIN.split(',').map(o => o.trim().replace(/\/$/, '')) 
+            : [];
+            
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            console.log("CORS blocked origin:", origin, "Allowed:", allowedOrigins);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 
