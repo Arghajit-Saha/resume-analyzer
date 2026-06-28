@@ -6,6 +6,7 @@ const resumeControllers = require("../controllers/resume.controller");
 const resumeRouter = express.Router();
 
 resumeRouter.post("/", authMiddleware.authUser, upload.single("resume"), resumeControllers.generateResumeReport);
+resumeRouter.get("/export/:id", authMiddleware.authUser, resumeControllers.exportResumeReport);
 resumeRouter.get("/:id", authMiddleware.authUser, resumeControllers.getResumeReport);
 resumeRouter.delete("/:id", authMiddleware.authUser, resumeControllers.deleteResumeReport);
 

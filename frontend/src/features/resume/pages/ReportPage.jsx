@@ -1,6 +1,6 @@
 import { useLocation, Link, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchReportById } from '../services/resume.api';
+import { fetchReportById, exportReportPDF } from '../services/resume.api';
 import Loader from '../../../components/Loader';
 import { useToast } from '../../../components/ToastContext';
 import CountUp from '../../../components/react-bits/CountUp';
@@ -98,6 +98,7 @@ export default function ReportPage() {
 
   const [report, setReport] = useState(location.state?.report || null);
   const [loading, setLoading] = useState(!!id && !location.state?.report);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     if (id && !location.state?.report) {
@@ -153,8 +154,17 @@ export default function ReportPage() {
     });
   };
 
-  const handleExport = () => {
-    window.print();
+  const handleExport = async () => {
+    if (!report?._id && !id) return;
+    try {
+      setIsExporting(true);
+      await exportReportPDF(report?._id || id);
+      addToast({ type: 'success', message: 'PDF downloaded successfully.' });
+    } catch (error) {
+      addToast({ type: 'error', message: 'Failed to generate PDF.' });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const scrollToSection = (id) => {
@@ -185,9 +195,13 @@ export default function ReportPage() {
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
                     Copy
                   </button>
-                  <button onClick={handleExport} className="flex-1 py-2 rounded-xl bg-heading text-inverse text-[12px] font-semibold hover:bg-heading/90 transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
-                    Print
+                  <button onClick={handleExport} disabled={isExporting} className="flex-1 py-2 rounded-xl bg-heading text-inverse text-[12px] font-semibold hover:bg-heading/90 transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isExporting ? (
+                      <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="6" /><line x1="12" y1="18" x2="12" y2="22" /><line x1="4.93" y1="4.93" x2="7.76" y2="7.76" /><line x1="16.24" y1="16.24" x2="19.07" y2="19.07" /><line x1="2" y1="12" x2="6" y2="12" /><line x1="18" y1="12" x2="22" y2="12" /><line x1="4.93" y1="19.07" x2="7.76" y2="16.24" /><line x1="16.24" y1="7.76" x2="19.07" y2="4.93" /></svg>
+                    ) : (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
+                    )}
+                    {isExporting ? 'Printing...' : 'Print'}
                   </button>
                 </div>
                 <button onClick={() => navigate('/')} className="w-full mt-1 py-1.5 text-[12px] font-semibold text-muted hover:text-heading transition-colors bg-transparent border-none flex items-center justify-center gap-1.5 cursor-pointer">
