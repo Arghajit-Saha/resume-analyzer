@@ -13,9 +13,9 @@ export default function AuthLayout({ children, mode }) {
         <div className="absolute rounded-full w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] bg-peach/20 dark:bg-peach/10 blur-[120px] bottom-[-10%] right-[-5%] animate-float-8" aria-hidden="true" />
       </div>
 
-      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1100px] min-h-[600px] my-auto bg-white dark:bg-card rounded-[32px] shadow-[0_30px_80px_rgba(0,0,0,0.08)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.5)] overflow-hidden border-[1.5px] border-white/40 dark:border-white/5">
+      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1100px] min-h-[600px] my-auto bg-white/70 dark:bg-card/70 backdrop-blur-2xl rounded-[32px] shadow-[0_30px_80px_rgba(0,0,0,0.08)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.5)] overflow-hidden border-[1.5px] border-white/40 dark:border-white/10">
         
-        <main className="flex-1 flex flex-col items-center justify-center p-12 max-md:p-8 max-md:pt-16 relative bg-white dark:bg-card" id="auth-form-panel">
+        <main className="flex-1 flex flex-col items-center justify-center p-12 max-md:p-8 max-md:pt-16 relative bg-transparent" id="auth-form-panel">
           <div className="absolute top-6 left-6 max-md:top-4 max-md:left-4">
             <ThemeToggle />
           </div>
@@ -49,7 +49,7 @@ export default function AuthLayout({ children, mode }) {
           </div>
         </main>
 
-        <aside className="hidden md:flex flex-col flex-none w-[45%] bg-lavender/50 dark:bg-card/50 justify-center items-center p-12 relative overflow-hidden border-l border-edge-subtle" id="auth-brand-panel">
+        <aside className="hidden md:flex flex-col flex-none w-[45%] bg-lavender/30 dark:bg-black/20 justify-center items-center p-12 relative overflow-hidden border-l border-white/20 dark:border-white/5" id="auth-brand-panel">
           <div className="absolute rounded-2xl z-[1] w-10 h-10 bg-sky top-[15%] right-[10%] rotate-[15deg] opacity-60 animate-float-7" aria-hidden="true" />
           <div className="absolute rounded-full z-[1] w-6 h-6 bg-peach bottom-[20%] left-[10%] opacity-70 animate-float-8" aria-hidden="true" />
 

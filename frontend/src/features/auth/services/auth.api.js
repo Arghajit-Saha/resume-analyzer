@@ -1,18 +1,18 @@
-import axios from  "axios"
+import axios from "axios"
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true
 });
 
-export async function register({firstName, lastName, email, password}) {
+export async function register({ firstName, lastName, email, password }) {
   const res = await api.post("/api/auth/register", {
     firstName, lastName, email, password
   });
   return res.data;
 }
 
-export async function login({email, password}) {
+export async function login({ email, password }) {
   const res = await api.post("/api/auth/login", {
     email, password
   });
@@ -31,4 +31,14 @@ export async function fetchMe() {
   } catch {
     return null;
   }
+}
+
+export async function googleVerify({ credential }) {
+  const res = await api.post("/api/auth/google/verify", { credential });
+  return res;
+}
+
+export async function googleRegister({ registrationToken, password }) {
+  const res = await api.post("/api/auth/google/register", { registrationToken, password });
+  return res.data;
 }

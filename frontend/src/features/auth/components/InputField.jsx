@@ -23,7 +23,7 @@ export default function InputField({
         <input
           id={id}
           type={inputType}
-          className={`w-full py-3.5 text-[15px] font-sans text-heading bg-input border-[1.5px] rounded-xl outline-none transition-all duration-200 placeholder:text-muted placeholder:font-normal hover:border-edge-mid hover:bg-white focus:border-accent focus:bg-white focus:shadow-[0_0_0_3px_var(--color-accent-ring)] ${icon ? 'pl-11 pr-4' : 'px-4'} ${error ? 'border-error focus:shadow-[0_0_0_3px_rgba(242,116,116,0.15)]' : 'border-edge'} ${isPassword ? 'pr-11' : ''}`}
+          className={`w-full py-3.5 text-[15px] font-sans text-heading bg-black/[0.03] dark:bg-white/5 border-[1.5px] rounded-xl outline-none transition-all duration-300 placeholder:text-muted placeholder:font-normal hover:border-edge-mid hover:bg-black/5 dark:hover:bg-white/10 focus:border-accent focus:bg-transparent focus:shadow-[0_0_15px_rgba(41,122,255,0.15)] dark:focus:shadow-[0_0_20px_rgba(41,122,255,0.2)] backdrop-blur-md ${icon ? 'pl-11 pr-4' : 'px-4'} ${error ? 'border-error focus:shadow-[0_0_15px_rgba(242,116,116,0.2)]' : 'border-white/40 dark:border-white/10'} ${isPassword ? 'pr-11' : ''}`}
           value={value}
           onChange={onChange}
           onFocus={() => setFocused(true)}
